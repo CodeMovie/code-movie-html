@@ -1,4 +1,4 @@
-# `<code-movie-html>` - Use HTML as a DSL for [@codemovie/code-movie](https://code.movie) animations
+# `<code-movie-html>` - Use HTML as a DSL for [Code.Movie](https://code.movie) animations
 
 Write this in HTML:
 
@@ -30,7 +30,7 @@ return a + b;
 </code-movie-html>
 ```
 
-Get an interactive code-movie-html tutorial like this:
+Get an interactive step-by-step coding tutorial like this:
 
 <img alt="An animated JavaScript tutorial" src="./assets/demo.gif">
 
