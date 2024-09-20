@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Demo</title>
+    <script type="importmap">
+      {
+        "imports": {
+          "@codemovie/code-movie": "../node_modules/@codemovie/code-movie/dist/index.js",
+          "@codemovie/code-movie/languages/plaintext": "../node_modules/@codemovie/code-movie/dist/languages/plaintext.js",
+          "@codemovie/code-movie/languages/json": "../node_modules/@codemovie/code-movie/dist/languages/json.js",
+          "@codemovie/code-movie/languages/elixir": "../node_modules/@codemovie/code-movie/dist/languages/elixir.js",
+          "@codemovie/code-movie/languages/rust": "../node_modules/@codemovie/code-movie/dist/languages/rust.js",
+          "@codemovie/code-movie/languages/css": "../node_modules/@codemovie/code-movie/dist/languages/css.js",
+          "@codemovie/code-movie/languages/html": "../node_modules/@codemovie/code-movie/dist/languages/html.js",
+          "@codemovie/code-movie/languages/ecmascript": "../node_modules/@codemovie/code-movie/dist/languages/ecmascript.js"
+        }
+      }
+    </script>
+    <script type="module" src="./index.js"></script>
+    <style>
+      body {
+        background-color: #fff;
+      }
+      code-movie-html {
+        font-size: 16px;
+        font-family: monospace;
+        border: 0.25em solid #eee;
+        box-shadow: 0.5em 0.5em 0 rgba(0, 0, 0, 0.2);
+        position: relative;
+      }
+      code-movie-html::part(stage) {
+        display: grid;
+        grid-template-columns: 16em auto;
+      }
+      code-movie-html::part(captions) {
+        grid-column: 1;
+        grid-row: 1 / 3;
+        padding: 1em;
+        border-right: 0.25em solid #eee;
+        align-self: stretch;
+      }
+      code-movie-html::part(animation) {
+        grid-column: 2;
+        grid-row: 1;
+        margin: 1em;
+        font-size: inherit;
+      }
+      code-movie-html::part(controls) {
+        position: absolute;
+        bottom: -4em;
+        right: -0.75em;
+      }
+      code-movie-html::part(default-controls) {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5em;
+      }
+      code-movie-html::part(default-controls-prev),
+      code-movie-html::part(default-controls-next) {
+        font-size: 16px;
+        font-weight: bold;
+        font-family: monospace;
+        border: 0.25em solid #eee;
+        background-color: #fff;
+      }
+      code-movie-html::part(default-controls-prev):not(:disabled):hover,
+      code-movie-html::part(default-controls-next):not(:disabled):hover {
+        border-color: skyblue;
+      }
+      code-movie-html::part(default-controls-prev):disabled,
+      code-movie-html::part(default-controls-next):disabled {
+        opacity: 0.5;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Demo</h1>
+    <code-movie-html language="javascript">
+      <figure>
+        <pre>// How to add two numbers in JS</pre>
+        <figcaption>A quick JavaScript Tutorial</figcaption>
+      </figure>
+      <figure>
+        <pre>
+// How to add two numbers in JS
+function add() {}</pre
+        >
+        <figcaption><b>Step 1:</b> declare a function</figcaption>
+      </figure>
+      <figure>
+        <pre>
+// How to add two numbers in JS
+function add(a, b) {}</pre
+        >
+        <figcaption><b>Step 2:</b> add function parameters</figcaption>
+      </figure>
+      <figure>
+        <pre>
+// How to add two numbers in JS
+function add(a, b) {
+  return a + b;
+}</pre
+        >
+        <figcaption>
+          <b>Step 3:</b> apply the plus operator and return the result
+        </figcaption>
+      </figure>
+    </code-movie-html>
+  </body>
+</html>

@@ -1,0 +1,47 @@
+{
+  "name": "@codemovie/code-movie-html",
+  "version": "0.0.1",
+  "description": "Use HTML as a DSL for Code.Movie",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.js",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./lib": {
+      "types": "./dist/lib.d.ts",
+      "import": "./dist/lib.js",
+      "default": "./dist/lib.js"
+    }
+  },
+  "scripts": {
+    "lint": "eslint src",
+    "build": "rm -rf dist && esbuild src/*.ts --format=esm --target=es2020 --minify --bundle --splitting --external:@codemovie/code-movie --outdir=dist",
+    "types": "tsc",
+    "serve": "npx serve"
+  },
+  "author": "peter@peterkroener.de",
+  "license": "MIT",
+  "peerDependencies": {
+    "@codemovie/code-movie": "^0.0.19"
+  },
+  "devDependencies": {
+    "esbuild": "^0.23.1",
+    "eslint": "^9.9.1",
+    "eslint-config-prettier": "^9.1.0",
+    "release-it": "^17.6.0",
+    "typescript": "^5.5.4",
+    "typescript-eslint": "^8.3.0"
+  },
+  "dependencies": {
+    "@codemovie/code-movie-runtime": "^2.0.1",
+    "@sirpepe/ornament": "^2.0.0",
+    "@sirpepe/shed": "^4.4.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
