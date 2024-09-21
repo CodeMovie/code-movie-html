@@ -405,6 +405,9 @@ export class CodeMovieHTML extends HTMLElement {
     const roots = Array.from(this.children).filter(
       (el) => el instanceof HTMLElement && el.tagName === "FIGURE"
     );
+    if (roots.length === 0) {
+      return;
+    }
     const frames = framesFromDom(roots, "pre");
     const animationHTML = toAnimationHTML(
       fromStringsToScene(frames, {
