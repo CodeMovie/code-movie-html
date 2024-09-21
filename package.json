@@ -22,7 +22,8 @@
     "build": "rm -rf dist && esbuild src/*.ts --format=esm --target=es2020 --metafile=meta.json --minify --bundle --external:@codemovie/code-movie --outdir=dist",
     "build:dev": "rm -rf dist && esbuild src/*.ts --format=esm --target=es2020 --metafile=meta.json --bundle --external:@codemovie/code-movie --outdir=dist",
     "types": "tsc",
-    "serve": "npx serve"
+    "serve": "npx serve",
+    "release": "release-it"
   },
   "author": "peter@peterkroener.de",
   "license": "MIT",
