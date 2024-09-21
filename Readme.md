@@ -32,7 +32,7 @@ return a + b;
 
 Get an interactive step-by-step coding tutorial like this:
 
-<img alt="An animated JavaScript tutorial" src="./assets/demo.gif">
+![An animated JavaScript tutorial](./assets/demo.gif)
 
 ## Getting started
 
