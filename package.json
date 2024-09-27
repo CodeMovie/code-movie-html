@@ -23,17 +23,19 @@
     "build:dev": "rm -rf dist && esbuild src/*.ts --format=esm --target=es2020 --metafile=meta.json --bundle --external:@codemovie/code-movie --outdir=dist",
     "types": "tsc",
     "serve": "npx serve",
+    "prepareRelease": "npm run lint && npm run types && npm run build",
     "release": "release-it"
   },
   "author": "peter@peterkroener.de",
   "license": "MIT",
   "peerDependencies": {
-    "@codemovie/code-movie": "^0.0.19"
+    "@codemovie/code-movie": "^0.0.20"
   },
   "devDependencies": {
     "esbuild": "^0.23.1",
     "eslint": "^9.9.1",
     "eslint-config-prettier": "^9.1.0",
+    "globals": "^15.9.0",
     "release-it": "^17.6.0",
     "typescript": "^5.5.4",
     "typescript-eslint": "^8.3.0"

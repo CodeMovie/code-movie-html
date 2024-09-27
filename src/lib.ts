@@ -10,33 +10,32 @@ import {
   string,
   subscribe,
 } from "@sirpepe/ornament";
-import { fromStringsToScene, toAnimationHTML } from "@codemovie/code-movie";
+import {
+  animateHTML,
+  type InputRange,
+  type InputDecoration,
+} from "@codemovie/code-movie";
 import "@codemovie/code-movie-runtime";
 import { fail } from "@sirpepe/shed/error";
 
-type InputFrame = Required<Parameters<typeof fromStringsToScene>[0][0]>;
-
-type IntermediateInputFrame = Required<
-  Parameters<typeof fromStringsToScene>[0][0]
-> & { to: number; toLine: number };
-
-type Data = {
-  tagName: string;
-  attributes: Record<string, string>;
+type InputFrame = {
+  decorations: InputDecoration[];
+  ranges: InputRange[];
+  code: string;
 };
 
-type Range = Required<Parameters<typeof fromStringsToScene>[0][0]>["ranges"][0];
+type IntermediateInputFrame = InputFrame & { to: number; toLine: number };
 
-function getData(element: Element): Data {
+function getData(element: Element): Record<string, string> {
   return {
-    tagName: element.tagName.toLowerCase(),
-    attributes: Object.fromEntries(
+    ...Object.fromEntries(
       Array.from(element.attributes, ({ name, value }) => [name, value])
     ),
+    tagName: element.tagName.toLowerCase(),
   };
 }
 
-function toRange(element: Element, from: number, to: number): Range {
+function toRange(element: Element, from: number, to: number): InputRange {
   return {
     from,
     to,
@@ -66,26 +65,30 @@ function toDecoration(
   to: number,
   fromLine: number,
   toLine: number
-) {
-  const decoration = {
-    data: getData(element),
-    kind: getDecorationKind(element),
-  };
-  if (decoration.kind === "GUTTER") {
-    return Object.assign(decoration, {
+): InputDecoration {
+  const data = getData(element);
+  const kind = getDecorationKind(element);
+  if (kind === "GUTTER") {
+    return {
+      kind,
+      data,
       line: fromLine,
       text: element.innerText,
-    });
-  } else if (decoration.kind === "LINE") {
-    return Object.assign(decoration, {
+    };
+  } else if (kind === "LINE") {
+    return {
+      kind,
+      data,
       fromLine,
       toLine,
-    });
+    };
   } else {
-    return Object.assign(decoration, {
+    return {
+      kind,
+      data,
       from,
       to,
-    });
+    };
   }
 }
 
@@ -140,7 +143,6 @@ export function framesFromDom(
     let to = 0;
     let toLine = 1;
     let code = "";
-    const ranges: Range = [];
     const decorations = [];
     const sourceElement = sourceSelector
       ? frameElement.querySelector(sourceSelector) ??
@@ -155,7 +157,7 @@ export function framesFromDom(
       // ranges.push(...childContent.ranges);
       decorations.push(...childContent.decorations);
     }
-    frames.push({ code, ranges, decorations });
+    frames.push({ code, ranges: [], decorations });
   }
   return frames;
 }
@@ -409,12 +411,10 @@ export class CodeMovieHTML extends HTMLElement {
       return;
     }
     const frames = framesFromDom(roots, "pre");
-    const animationHTML = toAnimationHTML(
-      fromStringsToScene(frames, {
-        language: this.#currentLanguageInstance ?? fail(),
-        tabSize: 2,
-      })
-    );
+    const animationHTML = animateHTML(frames, {
+      language: this.#currentLanguageInstance ?? fail(),
+      tabSize: 2,
+    });
     const runtime = this.#runtime.deref();
     runtime.keyframes = Object.keys(frames);
     runtime.innerHTML = animationHTML;
