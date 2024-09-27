@@ -51,9 +51,8 @@ You can then import the module `@codemovie/code-movie-html` into your project. T
 1. Some sort of **build process** that takes care of resolving dependency specifiers like `@codemovie/code-movie/languages/ecmascript` at compile time. Webpack, esbuild, Rollup and basically every other popular module bundler should be able to do this. Just make sure that you enable code splitting and tree shaking in your bundler - you don't want an entire Rust parser in your bundle unless you intend to use it.
 2. A [**`<script type="importmap">`**](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script/type/importmap) to resolve dependency specifiers at runtime. Check out `demo/index.html` to see this in action.
 3. A **replacement for the built-in module loader**. Everything concerned with loading language modules can be overwritten globally. Just change or replace the objects in the following properties on the global object:
-     - `globalThis[Symbol.for("CodeMovieHTML.moduleCache")]`
-     - `globalThis[Symbol.for("CodeMovieHTML.moduleLoaders")]`
-     - `globalThis[Symbol.for("CodeMovieHTML.languageLoaders")]`
+     - `globalThis[Symbol.for("CodeMovieHTML.moduleLoaders")]` (see `src/lib.ts` for the default implementation)
+     - `globalThis[Symbol.for("CodeMovieHTML.languageLoaders")]` (see `src/lib.ts` for the default implementation)
 
 ## HTML API
 

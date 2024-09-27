@@ -162,7 +162,6 @@ export function framesFromDom(
   return frames;
 }
 
-const CACHE_KEY: unique symbol = Symbol.for("CodeMovieHTML.moduleCache");
 const MODULES_KEY: unique symbol = Symbol.for("CodeMovieHTML.moduleLoaders");
 const LANGUAGES_KEY: unique symbol = Symbol.for(
   "CodeMovieHTML.languageLoaders"
@@ -170,43 +169,26 @@ const LANGUAGES_KEY: unique symbol = Symbol.for(
 
 declare global {
   interface Window {
-    [CACHE_KEY]: Record<string, () => any>;
     [MODULES_KEY]: Record<string, () => Promise<any>>;
     [LANGUAGES_KEY]: Record<string, () => Promise<any>>;
   }
 }
 
-window[CACHE_KEY] ??= {};
-
 window[MODULES_KEY] ??= {
   plaintext: async () =>
-    (window[CACHE_KEY].json ??= (
-      await import("@codemovie/code-movie/languages/plaintext")
-    ).default),
+    (await import("@codemovie/code-movie/languages/plaintext")).default,
   json: async () =>
-    (window[CACHE_KEY].json ??= (
-      await import("@codemovie/code-movie/languages/json")
-    ).default),
+    (await import("@codemovie/code-movie/languages/json")).default,
   elixir: async () =>
-    (window[CACHE_KEY].elixir ??= (
-      await import("@codemovie/code-movie/languages/elixir")
-    ).default),
+    (await import("@codemovie/code-movie/languages/elixir")).default,
   rust: async () =>
-    (window[CACHE_KEY].rust ??= (
-      await import("@codemovie/code-movie/languages/rust")
-    ).default),
+    (await import("@codemovie/code-movie/languages/rust")).default,
   css: async () =>
-    (window[CACHE_KEY].css ??= (
-      await import("@codemovie/code-movie/languages/css")
-    ).default),
+    (await import("@codemovie/code-movie/languages/css")).default,
   html: async () =>
-    (window[CACHE_KEY].html ??= (
-      await import("@codemovie/code-movie/languages/html")
-    ).default),
+    (await import("@codemovie/code-movie/languages/html")).default,
   ecmascript: async () =>
-    (window[CACHE_KEY].ecmascript ??= (
-      await import("@codemovie/code-movie/languages/ecmascript")
-    ).default),
+    (await import("@codemovie/code-movie/languages/ecmascript")).default,
 };
 
 window[LANGUAGES_KEY] ??= {
