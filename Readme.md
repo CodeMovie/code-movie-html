@@ -151,11 +151,11 @@ Goes to the frame at the specified index. Coerces and rounds indices to integers
 You can import two low-level objects from `@codemovie/code-movie-html/lib`: the
 unregistered element class and the core function `framesFromDom()`.
 
-## Class `CodeMovieHTML`
+### Class `CodeMovieHTML`
 
 Import this instead of the main import get register the class with a custom tag
 name or to extend it.
 
-## Function `framesFromDom(sourceElements: Element[], sourceSelector = "") => InputFrame[]`
+### Function `framesFromDom(sourceElements: Element[], sourceSelector = "") => InputFrame[]`
 
 Takes an array of elements and turns it into an array of input frames compatible with the function `fromStringsToScene()` from `@codemovie/code-movie`. Use this if you want to use HTML as a DSL for Code.Movie but want to skip the custom element wrapper. If a non-falsy value is provided for `sourceSelector`, the function will take its content from the first matching descendant of each source element; otherwise the source elements themselves serve as sources.
