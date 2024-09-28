@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "rootDir": "./",
+    "rootDir": "./src",
     "allowSyntheticDefaultImports": true,
     "moduleResolution": "bundler",
     "target": "esnext",
@@ -11,6 +11,5 @@
     "emitDeclarationOnly": true,
     "declarationDir": "dist"
   },
-  "include": ["**/*"],
   "exclude": ["node_modules", "dist"]
 }

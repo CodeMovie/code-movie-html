@@ -10,11 +10,6 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "default": "./dist/index.js"
-    },
-    "./lib": {
-      "types": "./dist/lib.d.ts",
-      "import": "./dist/lib.js",
-      "default": "./dist/lib.js"
     }
   },
   "scripts": {
@@ -22,16 +17,15 @@
     "build": "rm -rf dist && esbuild src/*.ts --format=esm --target=es2020 --metafile=meta.json --minify --bundle --external:@codemovie/code-movie --outdir=dist",
     "build:dev": "rm -rf dist && esbuild src/*.ts --format=esm --target=es2020 --metafile=meta.json --bundle --external:@codemovie/code-movie --outdir=dist",
     "types": "tsc",
-    "serve": "npx serve",
+    "demo": "npx serve",
     "prepareRelease": "npm run lint && npm run types && npm run build",
     "release": "release-it"
   },
   "author": "peter@peterkroener.de",
   "license": "MIT",
-  "peerDependencies": {
-    "@codemovie/code-movie": "^0.0.20"
-  },
   "devDependencies": {
+    "@codemovie/code-movie": "^0.0.20",
+    "@codemovie/code-movie-runtime": "^2.0.1",
     "esbuild": "^0.23.1",
     "eslint": "^9.9.1",
     "eslint-config-prettier": "^9.1.0",
@@ -39,11 +33,6 @@
     "release-it": "^17.6.0",
     "typescript": "^5.5.4",
     "typescript-eslint": "^8.3.0"
-  },
-  "dependencies": {
-    "@codemovie/code-movie-runtime": "^2.0.1",
-    "@sirpepe/ornament": "^2.0.0",
-    "@sirpepe/shed": "^4.4.0"
   },
   "publishConfig": {
     "access": "public"
