@@ -1,6 +1,6 @@
 {
   "name": "@codemovie/code-movie-html",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Use HTML as a DSL for Code.Movie",
   "type": "module",
   "main": "dist/index.js",
