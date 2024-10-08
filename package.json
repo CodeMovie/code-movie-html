@@ -13,12 +13,13 @@
     }
   },
   "scripts": {
+    "clean": "rm -rf dist",
     "lint": "eslint src",
-    "build": "rm -rf dist && esbuild src/*.ts --format=esm --target=es2020 --metafile=meta.json --minify --bundle --external:@codemovie/code-movie --outdir=dist",
-    "build:dev": "rm -rf dist && esbuild src/*.ts --format=esm --target=es2020 --metafile=meta.json --bundle --external:@codemovie/code-movie --outdir=dist",
+    "build": "esbuild src/*.ts --format=esm --target=es2020 --metafile=meta.json --minify --bundle --external:@codemovie/code-movie --outdir=dist",
+    "build:dev": "esbuild src/*.ts --format=esm --target=es2020 --metafile=meta.json --bundle --external:@codemovie/code-movie --outdir=dist",
     "types": "tsc",
     "demo": "npx serve",
-    "prepareRelease": "npm run lint && npm run types && npm run build",
+    "prepareRelease": "npm run clean && npm run lint && npm run types && npm run build",
     "release": "release-it"
   },
   "author": "peter@peterkroener.de",
