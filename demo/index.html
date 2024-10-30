@@ -1,61 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Demo</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Demo</title>
 
-<style>
-  body {
-    background-color: #fff;
-    --cm-line-numbers-enabled: 1;
-  }
-</style>
-
-<script type="importmap">
-  {
-    "imports": {
-      "@codemovie/code-movie": "../node_modules/@codemovie/code-movie/dist/index.js",
-      "@codemovie/code-movie/languages/ecmascript": "../node_modules/@codemovie/code-movie/dist/languages/ecmascript.js",
-      "@codemovie/code-movie-runtime": "../node_modules/@codemovie/code-movie-runtime/dist/index.js",
-      "@codemovie/code-movie-html": "../dist/index.js"
+  <style>
+    body {
+      background-color: #fff;
+      --cm-line-numbers-enabled: 1;
     }
-  }
-</script>
+  </style>
 
-<div class="animation">
-<pre class="frame"><code>// How to add two numbers in JS<code></pre>
-<pre class="frame"><code>// How to add two numbers in JS
+  <script type="importmap">
+    {
+      "imports": {
+        "@codemovie/code-movie": "../node_modules/@codemovie/code-movie/dist/index.js",
+        "@codemovie/code-movie/languages/ecmascript": "../node_modules/@codemovie/code-movie/dist/languages/ecmascript.js",
+        "@codemovie/code-movie-runtime": "../node_modules/@codemovie/code-movie-runtime/dist/index.js",
+        "@codemovie/code-movie-html": "../dist/index.js"
+      }
+    }
+  </script>
+
+  <div class="animation">
+    <pre class="frame"><code>// How to add two numbers in JS</code></pre>
+    <pre class="frame"><code>// How to add two numbers in JS
 function add() {}</code></pre>
-<pre class="frame">// How to add two numbers in JS
+    <pre class="frame"><code>// How to add two numbers in JS
 function add(a, b) {}</code></pre>
-<pre class="frame"><code>// How to add two numbers in JS
+    <pre class="frame"><code>// How to add two numbers in JS
 function add(a, b) {
   return a + b;
 }</code></pre>
-</div>
+    <pre class="frame"><code>// How to add two numbers in JS
+function add(a, b) {
+  return a + b;
+}
 
-<script type="module">
-  // Turn the contents of <code> elements nested within <pre class="frame">
-  // into frame objects. This is what this library is all about.
-  import { framesFromDom } from "@codemovie/code-movie-html";
-  const frameElements = document.querySelectorAll(".animation pre.frame", "code");
-  const frames = framesFromDom(frameElements)
+console.log(add(1, 2)); // > 3</code></pre>
+  </div>
 
-  // Use regular @codemovie/code-movie functionality to turn the frames into
-  // animation HTML and CSS
-  import { animateHTML } from "@codemovie/code-movie";
-  import ecmascript from "@codemovie/code-movie/languages/ecmascript";
-  const html = animateHTML(frames, { tabSize: 2, language: ecmascript() });
+  <script type="module">
+    // Turn the contents of <code> elements nested within <pre class="frame">
+    // into frame objects. This is what this library is all about.
+    import { framesFromDom } from "@codemovie/code-movie-html";
+    const frameElements = document.querySelectorAll(
+      ".animation pre.frame",
+      "code"
+    );
+    const frames = framesFromDom(frameElements);
 
-  // Use @code-movie/code-movie-runtime to add a basic UI to the animation and
-  import "@codemovie/code-movie-runtime";
-  const runtime = document.createElement("code-movie-runtime");
-  runtime.innerHTML = html;
-  runtime.controls = true;
-  runtime.keyframes = Object.keys(frames);
-  document.body.append(runtime);
+    // Use regular @codemovie/code-movie functionality to turn the frames into
+    // animation HTML and CSS
+    import { animateHTML } from "@codemovie/code-movie";
+    import ecmascript from "@codemovie/code-movie/languages/ecmascript";
+    const html = animateHTML(frames, { tabSize: 2, language: ecmascript() });
 
-  // Hide the source elements
-  document.querySelector(".animation").hidden = true;
-</script>
+    // Use @code-movie/code-movie-runtime to add a basic UI to the animation and
+    import "@codemovie/code-movie-runtime";
+    const runtime = document.createElement("code-movie-runtime");
+    runtime.innerHTML = html;
+    runtime.controls = true;
+    runtime.keyframes = Object.keys(frames);
+    document.body.append(runtime);
 
+    // Hide the source elements
+    document.querySelector(".animation").hidden = true;
+  </script>
+</html>
