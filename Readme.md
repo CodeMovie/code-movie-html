@@ -13,6 +13,12 @@ function add(a, b) {}</code></pre>
 function add(a, b) {
   return a + b;
 }</code></pre>
+<pre class="frame"><code>// How to add two numbers in JS
+function add(a, b) {
+  return a + b;
+}
+
+console.log(add(1, 2)); // > 3</code></pre>
 </div>
 
 <script type="module">
