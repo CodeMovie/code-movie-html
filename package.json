@@ -20,7 +20,7 @@
     "types": "tsc",
     "test": "npm run build && node --test",
     "demo": "npx serve",
-    "prepareRelease": "npm run clean && npm run lint && npm run types && npm run build",
+    "prepareRelease": "npm run clean && npm run lint && npm run types && npm run test && npm run build",
     "release": "release-it"
   },
   "author": "peter@peterkroener.de",
@@ -28,7 +28,7 @@
   "devDependencies": {
     "@codemovie/code-movie": "^0.0.20",
     "@codemovie/code-movie-runtime": "^2.0.1",
-    "esbuild": "^0.23.1",
+    "esbuild": "^0.24.0",
     "eslint": "^9.9.1",
     "eslint-config-prettier": "^9.1.0",
     "globals": "^15.9.0",
