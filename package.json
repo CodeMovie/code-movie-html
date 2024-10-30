@@ -2,6 +2,20 @@
   "name": "@codemovie/code-movie-html",
   "version": "1.1.0",
   "description": "Use HTML as a DSL for Code.Movie",
+  "keywords": [
+    "highlight",
+    "syntax"
+  ],
+  "homepage": "https://code.movie/",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/CodeMovie/code-movie-html.git"
+  },
+  "bugs": {
+    "url": "https://github.com/CodeMovie/code-movie-html/issues"
+  },
+  "author": "Peter Kröner <peter@peterkroener.de> (https://www.peterkroener.de/)",
+  "license": "MIT",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.js",
@@ -23,8 +37,6 @@
     "prepareRelease": "npm run clean && npm run lint && npm run types && npm run test && npm run build",
     "release": "release-it"
   },
-  "author": "peter@peterkroener.de",
-  "license": "MIT",
   "devDependencies": {
     "@codemovie/code-movie": "^0.0.20",
     "@codemovie/code-movie-runtime": "^2.0.1",
