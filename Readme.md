@@ -47,7 +47,11 @@ console.log(add(1, 2)); // > 3</code></pre>
 </script>
 ```
 
-To see the above in action, install this package, run `npm run demo` and go to `http://localhost:3000/demo/index.html`.
+Result:
+
+![An animated code sample in a loop](https://github.com/CodeMovie/code-movie-html/raw/feature/jsdom/demo/demo.gif)
+
+For an interactive example, install this package, run `npm run demo` and open `http://localhost:3000/demo/index.html` in a non-ancient web browser.
 
 ## Getting started
 
