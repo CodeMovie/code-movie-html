@@ -18,6 +18,7 @@
     "build": "esbuild src/*.ts --format=esm --target=es2020 --metafile=meta.json --minify --bundle --external:@codemovie/code-movie --outdir=dist",
     "build:dev": "esbuild src/*.ts --format=esm --target=es2020 --metafile=meta.json --bundle --external:@codemovie/code-movie --outdir=dist",
     "types": "tsc",
+    "test": "npm run build && node --test",
     "demo": "npx serve",
     "prepareRelease": "npm run clean && npm run lint && npm run types && npm run build",
     "release": "release-it"
@@ -31,6 +32,7 @@
     "eslint": "^9.9.1",
     "eslint-config-prettier": "^9.1.0",
     "globals": "^15.9.0",
+    "jsdom": "^25.0.1",
     "release-it": "^17.6.0",
     "typescript": "^5.5.4",
     "typescript-eslint": "^8.3.0"
