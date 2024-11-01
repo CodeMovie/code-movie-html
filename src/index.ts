@@ -1,4 +1,11 @@
-import type { InputRange, InputDecoration } from "@codemovie/code-movie";
+type Data = Record<string, string>;
+
+type InputRange = { from: number; to: number; data: Data };
+
+type InputDecoration =
+  | { kind: "GUTTER"; data: Data; line: number; text: string }
+  | { kind: "LINE"; data: Data; fromLine: number; toLine: number }
+  | { kind: "TEXT"; data: Data; from: number; to: number };
 
 type Context = {
   windowObject: Window & typeof globalThis;
