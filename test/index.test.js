@@ -63,4 +63,48 @@ suite("JSDOM", () => {
       },
     ]);
   });
+
+  test("It processes lines that are all decoration", () => {
+    const dom = new jsdom.JSDOM(
+      `<!DOCTYPE html><p>[\n\n<mark class="line">23,</mark>\n\n<mark class="line">42,</mark>\n\n<mark class="line">1337</mark>\n\n]</p>`
+    );
+    const actual = framesFromDom(dom.window.document.querySelectorAll("p"), {
+      windowObject: dom.window,
+    });
+    assert.deepStrictEqual(actual, [
+      {
+        code: "[\n\n23,\n\n42,\n\n1337\n\n]",
+        decorations: [
+          {
+            data: {
+              class: "line",
+              tagName: "mark",
+            },
+            fromLine: 3,
+            kind: "LINE",
+            toLine: 3,
+          },
+          {
+            data: {
+              class: "line",
+              tagName: "mark",
+            },
+            fromLine: 5,
+            kind: "LINE",
+            toLine: 5,
+          },
+          {
+            data: {
+              class: "line",
+              tagName: "mark",
+            },
+            fromLine: 7,
+            kind: "LINE",
+            toLine: 7,
+          },
+        ],
+        ranges: [],
+      },
+    ]);
+  });
 });
