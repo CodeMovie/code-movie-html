@@ -1,6 +1,6 @@
 # `@codemovie/code-movie-html` - Use HTML as a DSL for [Code.Movie](https://code.movie) animations
 
-Turn DOM (real DOM nodes as well as [jsdom](https://github.com/jsdom/jsdom) fake DOM nodes) elements into frame objects:
+Turn DOM elements into frame objects:
 
 ```html
 <div class="animation">
@@ -25,7 +25,7 @@ console.log(add(1, 2)); // > 3</code></pre>
   // Turn the contents of <code> elements nested within <pre class="frame">
   // into frame objects. This is what this library is all about.
   import { framesFromDom } from "@codemovie/code-movie-html";
-  const frameElements = document.querySelectorAll(".animation pre.frame", "code");
+  const frameElements = document.querySelectorAll(".animation pre.frame > code");
   const frames = framesFromDom(frameElements)
 
   // Use regular @codemovie/code-movie functionality to turn the frames into
@@ -65,31 +65,119 @@ You will almost certainly also want to install [`@codemovie/code-movie`](https:/
 
 ## Function `framesFromDom`
 
-The package exports a single function that you can point to some DOM with an optional selector to target nested elements:
+The package exports a single function that you can point to some DOM with additional (optional) options:
 
 ```typescript
-function framesFromDom(containerElements: Iterable<Element>, sourceSelector?: string, windowObject?: Window & typeof globalThis): InputFrame[];
+function framesFromDom(
+  containerElements: Iterable<Element>,
+  options?: Options
+): InputFrame[];
 ```
 
-Takes an **iterable of elements** (things like Arrays, NodeLists and the like) and turns it into an array of input frames compatible with [`@codemovie/code-movie`](https://www.npmjs.com/package/@codemovie/code-movie). If a non-falsy value is provided for `sourceSelector`, the function will take its content from the first matching descendant of each source element; otherwise the source elements themselves serve as sources.
+The function takes an **iterable of elements** (things like Arrays, NodeLists and the like) and turns it into an array of input frames compatible with [`@codemovie/code-movie`](https://www.npmjs.com/package/@codemovie/code-movie). The options object has the following shape:
 
-If your program's global object is not the the `window` object, you can pass the window object as a third argument. This is useful for work with non-browser DOM environments like JSON:
+```typescript
+type Options = {
+  windowObject?: Window & typeof globalThis; // defaults to window
+  decorationsSelector?: string; // defaults to "mark"
+};
+```
+
+- **`windowObject`** points to the window object in case your program's global object is not the the `window` object. This is useful for work with non-browser DOM environments like [jsdom](https://github.com/jsdom/jsdom). Defaults to `window`, which works for use in web browsers.
+- **`decorationsSelector`** is the selector for decorations (see below). Defaults to the selector `"mark"` to target `<mark>` elements.
+
+The following example shows how the library can be used with jsdom and a custom decorations selector:
 
 ```javascript
 import { framesFromDom } from "@codemovie/code-movie-html";
 import jsdom from "jsdom";
 
-const dom = new jsdom.JSDOM(`<!DOCTYPE html><p>[]</p><p>[42]</p><p>[23, 42]</p>`);
+const dom = new jsdom.JSDOM(
+  `<!DOCTYPE html><p>[]</p><p>[42]</p><p>[23, 42]</p>`
+);
 const actual = framesFromDom(
   // List of sources
   dom.window.document.querySelectorAll("p"),
-  // Source selector (none; the <p> elements already contain the content)
-  "",
-  // Reference to JSDOM's window object
-  dom.window
+  // Optional options
+  {
+    // Reference to JSDOM's window object
+    windowObject: dom.window,
+    // Only target <mark> elements with the class `foo` as decorations
+    decorationsSelector: "mark.foo",
+  }
 );
 ```
 
 ## HTML DSL specifics
 
-The library currently only extracts the text content from elements and their children. More advanced features are on their way.
+The library currently does two things:
+
+1. it extracts the **text content from elements** and their children to serve as the frame's content
+2. it turns **`<mark>` elements into decorations**, with different decoration types denoted by the `class` attribute
+
+Even more features are underway and will become available once the core library supports them.
+
+### Text extraction
+
+The library extracts the text contents from its target elements and their descendants. The tags and attributes of target element's descendants are usually ignored:
+
+```html
+<div class="target">Hello <b>World</p></div>
+```
+
+This markup will result in a frame containing the text `Hello World` with the `<b>` element contributing nothing but its contents.
+
+The only exception to this rule are elements that match the selector passed to the options for `framesFromDom()` (`<mark>` elements by default). These elements get turned into **decorations.**
+
+### Decorations
+
+[Decorations in Code.Movie](http://code.movie/docs/guides/decorations.html) can highlight lines, underline errors or place icons the gutter. Elements
+that match the selector passed to the options for `framesFromDom()` (`<mark>` elements by default) processed as decorations according to their class attributes:
+
+| Element's class name contains | Resulting decoration                                         |
+| ----------------------------- | ------------------------------------------------------------ |
+| `gutter`                      | Gutter decoration for the line the element is in             |
+| `line`                        | Line decoration for all lines that the element is part of    |
+| None of the above             | Text decoration for the characters within the element's tags |
+
+The `class` attributes can contain other strings, but whether or not they contain `gutter` or `line` determines whether the decoration ends up as a text, line or gutter decoration. The element's tag name and attributes are used to populate the decoration object's `data` fields:
+
+```javascript
+// Given <p>[]</p><p>[<mark class="foo">42</mark>]</p><p>[<mark class="foo">23</mark>, 42]</p>
+const frames = framesFromDom(document.querySelectorAll("p"));
+// Result:
+// [
+//   {
+//     code: "[]",
+//     decorations: [],
+//   },
+//   {
+//     code: "[42]",
+//     decorations: [
+//       {
+//         kind: "TEXT",
+//         data: {
+//           tagName: "mark",
+//           class: "foo",
+//         },
+//         from: 1,
+//         to: 3,
+//       },
+//     ],
+//   },
+//   {
+//     code: "[23, 42]",
+//     decorations: [
+//       {
+//         kind: "TEXT",
+//         data: {
+//           tagName: "mark",
+//           class: "foo",
+//         },
+//         from: 1,
+//         to: 3,
+//       },
+//     ],
+//   },
+// ];
+```
