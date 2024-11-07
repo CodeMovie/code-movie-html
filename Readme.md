@@ -61,7 +61,7 @@ Install this library via your favorite package manager:
 npm install @codemovie/code-movie-html
 ```
 
-You will almost certainly also want to install [`@codemovie/code-movie`](https://www.npmjs.com/package/@codemovie/code-movie) to turn the frames into an animation and [`@codemovie/code-movie-runtime`](https://www.npmjs.com/package/@codemovie/code-movie-runtime) might also be useful. If you want to work server-side or at compile-time, install [jsdom](https://github.com/jsdom/jsdom) as well.
+You will also want to install [`@codemovie/code-movie`](https://www.npmjs.com/package/@codemovie/code-movie) to turn the frames into an animation and [`@codemovie/code-movie-runtime`](https://www.npmjs.com/package/@codemovie/code-movie-runtime) might also be useful. If you want to work server-side or at compile-time, install [jsdom](https://github.com/jsdom/jsdom) as well.
 
 ## Function `framesFromDom`
 
@@ -125,7 +125,7 @@ The library extracts the text contents from its target elements and their descen
 <div class="target">Hello <b>World</p></div>
 ```
 
-This markup will result in a frame containing the text `Hello World` with the `<b>` element contributing nothing but its contents.
+This markup will result in a frame containing the text `Hello World`, with the `<b>` element contributing nothing but its contents.
 
 The only exception to this rule are elements that match the selector passed to the options for `framesFromDom()` (`<mark>` elements by default). These elements get turned into **decorations.**
 
@@ -134,13 +134,13 @@ The only exception to this rule are elements that match the selector passed to t
 [Decorations in Code.Movie](http://code.movie/docs/guides/decorations.html) can highlight lines, underline errors or place icons the gutter. Elements
 that match the selector passed to the options for `framesFromDom()` (`<mark>` elements by default) processed as decorations according to their class attributes:
 
-| Element's class name contains | Resulting decoration                                         |
-| ----------------------------- | ------------------------------------------------------------ |
-| `gutter`                      | Gutter decoration for the line the element is in             |
-| `line`                        | Line decoration for all lines that the element is part of    |
-| None of the above             | Text decoration for the characters within the element's tags |
+| Element's class name contains | Resulting decoration                                             |
+| ----------------------------- | ---------------------------------------------------------------- |
+| `gutter`                      | **Gutter decoration** for the line the element is in             |
+| `line`                        | **Line decoration** for all lines that the element is part of    |
+| None of the above             | **Text decoration** for the characters within the element's tags |
 
-The `class` attributes can contain other strings, but whether or not they contain `gutter` or `line` determines whether the decoration ends up as a text, line or gutter decoration. The element's tag name and attributes are used to populate the decoration object's `data` fields:
+The `class` attribute can contain other strings, but whether or not they contain `gutter` or `line` determines whether the decoration ends up as a text, line or gutter decoration. The element's tag name and attributes are used to populate the decoration object's `data` fields:
 
 ```javascript
 // Given <p>[]</p><p>[<mark class="foo">42</mark>]</p><p>[<mark class="foo">23</mark>, 42]</p>
