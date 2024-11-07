@@ -1,6 +1,18 @@
-import type { InputRange, InputDecoration } from "@codemovie/code-movie";
+type Data = Record<string, string>;
 
-type Context = { window: Window & typeof globalThis };
+type InputRange = { from: number; to: number; data: Data };
+
+type InputDecoration =
+  | { kind: "GUTTER"; data: Data; line: number; text: string }
+  | { kind: "LINE"; data: Data; fromLine: number; toLine: number }
+  | { kind: "TEXT"; data: Data; from: number; to: number };
+
+type Context = {
+  windowObject: Window & typeof globalThis;
+  decorationsSelector: string;
+};
+
+type Options = Partial<Context>;
 
 type InputFrame = {
   decorations: InputDecoration[];
@@ -9,10 +21,6 @@ type InputFrame = {
 };
 
 type IntermediateInputFrame = InputFrame & { to: number; toLine: number };
-
-function fail(message: string): never {
-  throw new Error(message);
-}
 
 function getData(element: Element): Record<string, string> {
   return {
@@ -33,8 +41,8 @@ function toRange(element: Element, from: number, to: number): InputRange {
 
 function isGutterDecoration(node: Node, context: Context): boolean {
   return (
-    node instanceof context.window.HTMLElement &&
-    node.tagName === "MARK" &&
+    node instanceof context.windowObject.HTMLElement &&
+    node.matches(context.decorationsSelector) &&
     node.classList.contains("gutter")
   );
 }
@@ -93,13 +101,13 @@ function fromNode(
   const decorations = [];
   // Measure the current progress through the text, skipping over gutter
   // decorations (as their content does not count as "code")
-  if (node.nodeType === context.window.Node.TEXT_NODE) {
+  if (node.nodeType === context.windowObject.Node.TEXT_NODE) {
     const textContent = node.textContent ?? "";
     code += textContent;
     to += textContent.length;
     const numBreaks = textContent.split("\n").length - 1;
     toLine += numBreaks;
-  } else if (node instanceof context.window.HTMLElement) {
+  } else if (node instanceof context.windowObject.HTMLElement) {
     if (!isGutterDecoration(node, context)) {
       for (const childNode of node.childNodes) {
         const childContent = fromNode(childNode, to, toLine, context);
@@ -113,8 +121,8 @@ function fromNode(
   }
   // Create a new range or decoration for non-text nodes. <mark> turns into a
   // decoration, and other element defines a range.
-  if (node instanceof context.window.HTMLElement) {
-    if (node.tagName === "MARK") {
+  if (node instanceof context.windowObject.HTMLElement) {
+    if (node.matches(context.decorationsSelector)) {
       decorations.push(toDecoration(node, from, to, fromLine, toLine));
     } else {
       ranges.push(toRange(node, from, to));
@@ -125,26 +133,21 @@ function fromNode(
 
 export function framesFromDom(
   containerElements: Iterable<Element>,
-  sourceSelector = "",
-  windowObject = window
+  { windowObject = window, decorationsSelector = "mark" }: Options = {}
 ): InputFrame[] {
-  const context = { window: windowObject };
+  const context = { windowObject, decorationsSelector };
   const frames = [];
   for (const frameElement of containerElements) {
     let to = 0;
     let toLine = 1;
     let code = "";
     const decorations = [];
-    const sourceElement = sourceSelector
-      ? frameElement.querySelector(sourceSelector) ??
-        fail(`No element found for selector ${sourceSelector}`)
-      : frameElement;
-    for (const childNode of sourceElement.childNodes) {
+    for (const childNode of frameElement.childNodes) {
       const childContent = fromNode(childNode, to, toLine, context);
       to = childContent.to;
       toLine = childContent.toLine;
       code += childContent.code;
-      // Ranges are not supported ATM :)
+      // Ranges are currently not properly supported by the core library
       // ranges.push(...childContent.ranges);
       decorations.push(...childContent.decorations);
     }
