@@ -38,14 +38,14 @@
     "release": "release-it"
   },
   "devDependencies": {
-    "@codemovie/code-movie": "^0.0.20",
-    "@codemovie/code-movie-runtime": "^2.0.1",
+    "@codemovie/code-movie": "^0.0.21",
+    "@codemovie/code-movie-runtime": "^2.2.0",
     "esbuild": "^0.24.0",
     "eslint": "^9.9.1",
-    "eslint-config-prettier": "^9.1.0",
+    "eslint-config-prettier": "^10.0.0",
     "globals": "^15.9.0",
-    "jsdom": "^25.0.1",
-    "release-it": "^17.6.0",
+    "jsdom": "^26.0.0",
+    "release-it": "^18.0.0",
     "typescript": "^5.5.4",
     "typescript-eslint": "^8.3.0"
   },
