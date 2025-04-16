@@ -4,7 +4,11 @@
   "description": "Use HTML as a DSL for Code.Movie",
   "keywords": [
     "highlight",
-    "syntax"
+    "syntax",
+    "animation",
+    "morph",
+    "diff",
+    "code"
   ],
   "homepage": "https://code.movie/",
   "repository": {
