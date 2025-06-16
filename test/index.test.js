@@ -18,6 +18,62 @@ suite("JSDOM", () => {
     ]);
   });
 
+  test("process ranges", () => {
+    const dom = new jsdom.JSDOM(
+      `<!DOCTYPE html><p>[<span class="r">]</span></p><p>[42<span class="r">]</span></p><p>[23, 42<span class="r">]</span></p>`
+    );
+    const actual = framesFromDom(dom.window.document.querySelectorAll("p"), {
+      windowObject: dom.window,
+    });
+    assert.deepStrictEqual(actual, [
+      {
+        code: "[]",
+        ranges: [
+          {
+            data: {
+              class: "r",
+              tagName: "span",
+            },
+            from: 1,
+            to: 2,
+          },
+        ],
+        decorations: [],
+        annotations: [],
+      },
+      {
+        code: "[42]",
+        ranges: [
+          {
+            data: {
+              class: "r",
+              tagName: "span",
+            },
+            from: 3,
+            to: 4,
+          },
+        ],
+        decorations: [],
+        annotations: [],
+      },
+      {
+        code: "[23, 42]",
+        ranges: [
+          {
+            data: {
+              class: "r",
+              tagName: "span",
+            },
+            from: 7,
+            to: 8,
+          },
+        ],
+        decorations: [],
+        annotations: [],
+      },
+    ]);
+  });
+
   test("process text decorations", () => {
     const dom = new jsdom.JSDOM(
       `<!DOCTYPE html><p>[]</p><p>[<mark class="foo">42</mark>]</p><p>[<mark class="foo">23</mark>, 42]</p>`

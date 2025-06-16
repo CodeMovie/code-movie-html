@@ -220,8 +220,8 @@ export function framesFromDom(
   containerElements: Iterable<Element>,
   {
     windowObject = window,
-    decorationsSelector = "mark",
-    annotationsSelector = "span",
+    decorationsSelector = "mark, mark:is(.gutter, .line)",
+    annotationsSelector = "span:is(.inlay)",
   }: Options = {}
 ): InputFrame[] {
   const context = { windowObject, decorationsSelector, annotationsSelector };
@@ -231,6 +231,7 @@ export function framesFromDom(
     let toGrapheme = 0;
     let toLine = 1;
     let code = "";
+    const ranges = [];
     const decorations = [];
     const annotations = [];
     for (const childNode of frameElement.childNodes) {
@@ -246,13 +247,13 @@ export function framesFromDom(
       toLine = childContent.toLine;
       code += childContent.code;
       // Ranges are currently not properly supported by the core library
-      // ranges.push(...childContent.ranges);
+      ranges.push(...childContent.ranges);
       decorations.push(...childContent.decorations);
       // The annotations feature is currently in stealth mode. Just ignore this,
       // dear reader :)
       annotations.push(...childContent.annotations);
     }
-    frames.push({ code, ranges: [], decorations, annotations });
+    frames.push({ code, ranges, decorations, annotations });
   }
   return frames;
 }

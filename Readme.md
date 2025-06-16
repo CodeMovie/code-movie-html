@@ -1,6 +1,7 @@
 # `@codemovie/code-movie-html` - Use HTML as a DSL for [Code.Movie](https://code.movie) animations
 
-Turn DOM elements into frame objects:
+**Author animated code examples with HTML/DOM!** Just write some markup, push
+DOM `elements` into a function and hand over the result to Code.Movie:
 
 ```html
 <div class="animation">
@@ -61,7 +62,11 @@ Install this library via your favorite package manager:
 npm install @codemovie/code-movie-html
 ```
 
-You will also want to install [`@codemovie/code-movie`](https://www.npmjs.com/package/@codemovie/code-movie) to turn the frames into an animation and [`@codemovie/code-movie-runtime`](https://www.npmjs.com/package/@codemovie/code-movie-runtime) might also be useful. If you want to work server-side or at compile-time, install [jsdom](https://github.com/jsdom/jsdom) as well.
+<!-- prettier-ignore -->
+> [!IMPORTANT]
+> **This package does _not_ bundle the Code.Movie core library!** You have to either manually install [@codemovie/code-movie](https://www.npmjs.com/package/@codemovie/code-movie) or load the relevant files from a CDN like [jsDelivr](https://www.jsdelivr.com/) as shown in the examples below.
+
+You may also want to install [`@codemovie/code-movie-runtime`](https://www.npmjs.com/package/@codemovie/code-movie-runtime) and if you want to work server-side or at compile-time, install [jsdom](https://github.com/jsdom/jsdom) as well.
 
 ## Function `framesFromDom`
 
@@ -79,12 +84,12 @@ The function takes an **iterable of elements** (things like Arrays, NodeLists an
 ```typescript
 type Options = {
   windowObject?: Window & typeof globalThis; // defaults to window
-  decorationsSelector?: string; // defaults to "mark"
+  decorationsSelector?: string; // defaults to "mark, mark:is(.gutter, .line)"
 };
 ```
 
 - **`windowObject`** points to the window object in case your program's global object is not the the `window` object. This is useful for work with non-browser DOM environments like [jsdom](https://github.com/jsdom/jsdom). Defaults to `window`, which works for use in web browsers.
-- **`decorationsSelector`** is the selector for decorations (see below). Defaults to the selector `"mark"` to target `<mark>` elements.
+- **`decorationsSelector`** is the selector for decorations (see below). Defaults to the selector `"mark, mark:is(.gutter, .line)"` to target `<mark>` elements with either no class (text decorations) or classes `line` or `gutter` for the appropriate decoration kinds.
 
 The following example shows how the library can be used with jsdom and a custom decorations selector:
 
