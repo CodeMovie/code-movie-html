@@ -4,7 +4,7 @@ import jsdom from "jsdom";
 import { framesFromDom } from "../dist/index.js";
 
 suite("JSDOM", () => {
-  test("It works with JSDOM", () => {
+  test("works with JSDOM", () => {
     const dom = new jsdom.JSDOM(
       `<!DOCTYPE html><p>[]</p><p>[42]</p><p>[23, 42]</p>`
     );
@@ -12,13 +12,13 @@ suite("JSDOM", () => {
       windowObject: dom.window,
     });
     assert.deepStrictEqual(actual, [
-      { code: "[]", ranges: [], decorations: [] },
-      { code: "[42]", ranges: [], decorations: [] },
-      { code: "[23, 42]", ranges: [], decorations: [] },
+      { code: "[]", ranges: [], decorations: [], annotations: [] },
+      { code: "[42]", ranges: [], decorations: [], annotations: [] },
+      { code: "[23, 42]", ranges: [], decorations: [], annotations: [] },
     ]);
   });
 
-  test("It processes decorations", () => {
+  test("process text decorations", () => {
     const dom = new jsdom.JSDOM(
       `<!DOCTYPE html><p>[]</p><p>[<mark class="foo">42</mark>]</p><p>[<mark class="foo">23</mark>, 42]</p>`
     );
@@ -30,6 +30,7 @@ suite("JSDOM", () => {
         code: "[]",
         ranges: [],
         decorations: [],
+        annotations: [],
       },
       {
         code: "[42]",
@@ -45,6 +46,7 @@ suite("JSDOM", () => {
             to: 3,
           },
         ],
+        annotations: [],
       },
       {
         code: "[23, 42]",
@@ -60,11 +62,44 @@ suite("JSDOM", () => {
             to: 3,
           },
         ],
+        annotations: [],
       },
     ]);
   });
 
-  test("It processes lines that are all decoration", () => {
+  test("process annotations", () => {
+    const dom = new jsdom.JSDOM(
+      `<!DOCTYPE html><p>[] <span class="inlay">Wee</span></p><p>[42]</p><p>[23, 42]</p>`
+    );
+    const actual = framesFromDom(dom.window.document.querySelectorAll("p"), {
+      windowObject: dom.window,
+    });
+    assert.deepStrictEqual(actual, [
+      {
+        code: "[] ",
+        ranges: [],
+        decorations: [],
+        annotations: [
+          {
+            char: 3,
+            data: {
+              class: "inlay",
+              tagName: "span",
+            },
+            kind: "INLAY",
+            line: 1,
+            text: "Wee",
+          },
+        ],
+      },
+      { code: "[42]", ranges: [], decorations: [], annotations: [] },
+      { code: "[23, 42]", ranges: [], decorations: [], annotations: [] },
+    ]);
+  });
+
+  // test("process empty annotations", () => {});
+
+  test("process lines that are all decoration", () => {
     const dom = new jsdom.JSDOM(
       `<!DOCTYPE html><p>[\n\n<mark class="line">23,</mark>\n\n<mark class="line">42,</mark>\n\n<mark class="line">1337</mark>\n\n]</p>`
     );
@@ -103,6 +138,7 @@ suite("JSDOM", () => {
             toLine: 7,
           },
         ],
+        annotations: [],
         ranges: [],
       },
     ]);

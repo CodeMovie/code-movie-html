@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.1.0
+
+- **Feature:** Add support for inline annotations (a core library feature currently in stealth mode).
+
 ## 2.0.0
 
 - **Breaking:** `framesFromDom()` now only takes two arguments: a list of target elements and an options object. The `windowObject` argument has been moved into the options object, the `sourceSelector` argument got removed due to extreme uselessness.
