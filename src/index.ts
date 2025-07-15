@@ -40,8 +40,22 @@ const graphemeSegmenter = new Intl.Segmenter("en-EN", {
   granularity: "grapheme",
 });
 
-function countGraphemes(string: string): number {
-  return Array.from(graphemeSegmenter.segment(string)).length;
+function countGraphemes(
+  string: string,
+  fromGrapheme: number,
+  fromLine: number
+): { toGrapheme: number; toLine: number } {
+  let toGrapheme = fromGrapheme;
+  let toLine = fromLine;
+  for (const { segment } of graphemeSegmenter.segment(string)) {
+    if (segment === "\n") {
+      toLine++;
+      toGrapheme = 0;
+    } else {
+      toGrapheme++;
+    }
+  }
+  return { toGrapheme, toLine };
 }
 
 function getText(element: Element, context: Context): string {
@@ -158,9 +172,7 @@ function fromNode(
     const textContent = node.textContent ?? "";
     code += textContent;
     toCodePoint += textContent.length;
-    toGrapheme += countGraphemes(textContent);
-    const numBreaks = textContent.split("\n").length - 1;
-    toLine += numBreaks;
+    ({ toGrapheme, toLine } = countGraphemes(textContent, toGrapheme, toLine));
   } else if (node instanceof context.windowObject.HTMLElement) {
     if (!isSkippableExternal(node, context)) {
       for (const childNode of node.childNodes) {
@@ -177,6 +189,7 @@ function fromNode(
         code += childContent.code;
         ranges.push(...childContent.ranges);
         decorations.push(...childContent.decorations);
+        annotations.push(...childContent.annotations);
       }
     }
   }
