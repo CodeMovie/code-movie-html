@@ -1,6 +1,6 @@
 {
   "name": "@codemovie/code-movie-html",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Use HTML as a DSL for Code.Movie",
   "keywords": [
     "highlight",
