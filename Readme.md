@@ -84,12 +84,12 @@ The function takes an **iterable of elements** (things like Arrays, NodeLists an
 ```typescript
 type Options = {
   windowObject?: Window & typeof globalThis; // defaults to window
-  decorationsSelector?: string; // defaults to "mark, mark:is(.gutter, .line)"
+  decorationsSelector?: mark; // defaults to "mark"
 };
 ```
 
 - **`windowObject`** points to the window object in case your program's global object is not the the `window` object. This is useful for work with non-browser DOM environments like [jsdom](https://github.com/jsdom/jsdom). Defaults to `window`, which works for use in web browsers.
-- **`decorationsSelector`** is the selector for decorations (see below). Defaults to the selector `"mark, mark:is(.gutter, .line)"` to target `<mark>` elements with either no class (text decorations) or classes `line` or `gutter` for the appropriate decoration kinds.
+- **`decorationsSelector`** is the selector for decorations (see below). Defaults to the selector `"mark"` to target `<mark>` elements with either no class (text decorations) or classes `line` or `gutter` for the appropriate decoration kinds.
 
 The following example shows how the library can be used with jsdom and a custom decorations selector:
 
@@ -111,6 +111,21 @@ const actual = framesFromDom(
     decorationsSelector: "mark.foo",
   }
 );
+```
+
+## Static highlighting
+
+For static highlighting, simply use only one of the frames returned by `framesFromDom()`:
+
+```javascript
+import { highlightHTML } from "@codemovie/code-movie";
+
+const frame = framesFromDom(".animation pre.frame > code")[0];
+
+const highlightFirstFrameHTML = highlightHTML(frame, {
+  tabSize: 2,
+  language: ecmascript(),
+});
 ```
 
 ## HTML DSL specifics

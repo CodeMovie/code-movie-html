@@ -22,6 +22,10 @@
     }
   </script>
 
+  <h1>@codemovie/code-movie-html</h1>
+
+  <h2>Animation</h2>
+
   <div class="animation">
     <pre class="frame"><code>// How to add two numbers in JS</code></pre>
     <pre class="frame"><code>// How to add two numbers in JS
@@ -45,24 +49,56 @@ console.log(add(1, 2)); // > 3</code></pre>
     // into frame objects. This is what this library is all about.
     import { framesFromDom } from "@codemovie/code-movie-html";
     const frameElements = document.querySelectorAll(
-      ".animation pre.frame",
+      ".animation pre.frame > code",
       "code"
     );
     const frames = framesFromDom(frameElements);
 
     // Use regular @codemovie/code-movie functionality to turn the frames into
     // animation HTML and CSS
-    import { animateHTML } from "@codemovie/code-movie";
+    import {
+      animateHTML,
+      highlightHTML,
+      monokaiLight,
+    } from "@codemovie/code-movie";
     import ecmascript from "@codemovie/code-movie/languages/ecmascript";
-    const html = animateHTML(frames, { tabSize: 2, language: ecmascript() });
+
+    const animation = animateHTML(frames, {
+      tabSize: 2,
+      language: ecmascript(),
+      theme: monokaiLight,
+    });
 
     // Use @code-movie/code-movie-runtime to add a basic UI to the animation and
     import "@codemovie/code-movie-runtime";
     const runtime = document.createElement("code-movie-runtime");
-    runtime.innerHTML = html;
+    runtime.innerHTML = animation;
     runtime.controls = true;
     runtime.keyframes = Object.keys(frames);
     document.body.append(runtime);
+
+    const animationSource = document
+      .querySelector(".animation")
+      .innerHTML.replaceAll("    <pre", "<pre")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;");
+    document.body.innerHTML += `<p>Source:</p><pre>${animationSource}</pre>`;
+
+    // Add the last frame as a highlighted element
+    const frame = framesFromDom(frameElements)[frameElements.length - 1];
+    const highlight = highlightHTML(frame, {
+      tabSize: 2,
+      language: ecmascript(),
+      theme: monokaiLight,
+    });
+
+    const highlightSource = document
+      .querySelector(".animation")
+      .lastElementChild.innerHTML.replaceAll("    <pre", "<pre")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;");
+
+    document.body.innerHTML += `<h2>Static highlight</h2>${highlight}<p>Source:</p><pre>${highlightSource}</pre>`;
 
     // Hide the source elements
     document.querySelector(".animation").hidden = true;

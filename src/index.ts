@@ -233,7 +233,7 @@ export function framesFromDom(
   containerElements: Iterable<Element>,
   {
     windowObject = window,
-    decorationsSelector = "mark, mark:is(.gutter, .line)",
+    decorationsSelector = "mark",
     annotationsSelector = "span:is(.inlay)",
   }: Options = {}
 ): InputFrame[] {
