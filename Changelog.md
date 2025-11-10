@@ -1,9 +1,8 @@
 # Changelog
 
-## Next
+## 2.0.1
 
-- **Feature:** Add proper support for ranges (a core library feature currently in development).
-- **Feature:** Add support for inline annotations (a core library feature currently in stealth mode).
+- **Chore:** Bump dependencies, update readme and demos
 
 ## 2.0.0
 
