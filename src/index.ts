@@ -259,7 +259,6 @@ export function framesFromDom(
       toGrapheme = childContent.toGrapheme;
       toLine = childContent.toLine;
       code += childContent.code;
-      // Ranges are currently not properly supported by the core library
       ranges.push(...childContent.ranges);
       decorations.push(...childContent.decorations);
       // The annotations feature is currently in stealth mode. Just ignore this,
