@@ -43,7 +43,7 @@ const graphemeSegmenter = new Intl.Segmenter("en-EN", {
 function countGraphemes(
   string: string,
   fromGrapheme: number,
-  fromLine: number
+  fromLine: number,
 ): { toGrapheme: number; toLine: number } {
   let toGrapheme = fromGrapheme;
   let toLine = fromLine;
@@ -73,7 +73,7 @@ function getText(element: Element, context: Context): string {
 function getData(element: Element): Record<string, string> {
   return {
     ...Object.fromEntries(
-      Array.from(element.attributes, ({ name, value }) => [name, value])
+      Array.from(element.attributes, ({ name, value }) => [name, value]),
     ),
     tagName: element.tagName.toLowerCase(),
   };
@@ -98,15 +98,15 @@ function isSkippableExternal(node: Node, context: Context): boolean {
 }
 
 function getExternalKind(
-  element: Element
+  element: Element,
 ): "LINE" | "GUTTER" | "TEXT" | "INLAY" {
   return element.classList.contains("line")
     ? "LINE"
     : element.classList.contains("gutter")
-    ? "GUTTER"
-    : element.classList.contains("inlay")
-    ? "INLAY"
-    : "TEXT";
+      ? "GUTTER"
+      : element.classList.contains("inlay")
+        ? "INLAY"
+        : "TEXT";
 }
 
 function toExternal(
@@ -116,7 +116,7 @@ function toExternal(
   fromGrapheme: number,
   fromLine: number,
   toLine: number,
-  context: Context
+  context: Context,
 ): InputDecoration | InputAnnotation {
   const data = getData(element);
   const kind = getExternalKind(element);
@@ -157,7 +157,7 @@ function fromNode(
   fromCodePoint: number,
   fromGrapheme: number,
   fromLine: number,
-  context: Context
+  context: Context,
 ): IntermediateInputFrame {
   let toCodePoint = fromCodePoint;
   let toGrapheme = fromGrapheme;
@@ -181,7 +181,7 @@ function fromNode(
           toCodePoint,
           toGrapheme,
           toLine,
-          context
+          context,
         );
         toCodePoint = childContent.toCodePoint;
         toGrapheme = childContent.toGrapheme;
@@ -207,7 +207,7 @@ function fromNode(
         toGrapheme,
         fromLine,
         toLine,
-        context
+        context,
       );
       if (external.kind === "INLAY") {
         annotations.push(external);
@@ -235,7 +235,7 @@ export function framesFromDom(
     windowObject = window,
     decorationsSelector = "mark",
     annotationsSelector = "span:is(.inlay)",
-  }: Options = {}
+  }: Options = {},
 ): InputFrame[] {
   const context = { windowObject, decorationsSelector, annotationsSelector };
   const frames = [];
@@ -253,7 +253,7 @@ export function framesFromDom(
         toCodePoint,
         toGrapheme,
         toLine,
-        context
+        context,
       );
       toCodePoint = childContent.toCodePoint;
       toGrapheme = childContent.toGrapheme;
