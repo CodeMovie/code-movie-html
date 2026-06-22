@@ -75,7 +75,7 @@ The package exports a single function that you can point to some DOM with additi
 ```typescript
 function framesFromDom(
   containerElements: Iterable<Element>,
-  options?: Options
+  options?: Options,
 ): InputFrame[];
 ```
 
@@ -98,7 +98,7 @@ import { framesFromDom } from "@codemovie/code-movie-html";
 import jsdom from "jsdom";
 
 const dom = new jsdom.JSDOM(
-  `<!DOCTYPE html><p>[]</p><p>[42]</p><p>[23, 42]</p>`
+  `<!DOCTYPE html><p>[]</p><p>[42]</p><p>[23, 42]</p>`,
 );
 const actual = framesFromDom(
   // List of sources
@@ -109,7 +109,7 @@ const actual = framesFromDom(
     windowObject: dom.window,
     // Only target <mark> elements with the class `foo` as decorations
     decorationsSelector: "mark.foo",
-  }
+  },
 );
 ```
 
@@ -130,29 +130,44 @@ const highlightFirstFrameHTML = highlightHTML(frame, {
 
 ## HTML DSL specifics
 
-The library currently does two things:
+The library currently does two and three things:
 
-1. it extracts the **text content from elements** and their children to serve as the frame's content
-2. it turns **`<mark>` elements into decorations**, with different decoration types denoted by the `class` attribute
+1. it extracts the **text content from target elements** and their descendants to serve as the frame's content. The existence of descendant elements (ie. non-text content) has the following side effects:
+   a. if a descendant **matches `decorationsSelector`, the descendant is turned into a decoration**, with different decoration types denoted by the `class` attribute
+   b. all other descendants are **turned into ranges** with their tag name and attributes set as properties on the range's `data` property
 
 Even more features are underway and will become available once the core library supports them.
 
 ### Text extraction
 
-The library extracts the text contents from its target elements and their descendants. The tags and attributes of target element's descendants are usually ignored:
+The library extracts all text contents from its target elements and their descendants. If a descendant matches the `decorationSelector` option, it turns into a decoration affecting the content nested within the descendant. Descendants that do not match `decorationSelector` establish ranges.
+
+### Ranges
+
+**Ranges** are [Code.Movie's mechanism to salt sections of code](http://code.movie/docs/guides/salting.html). Any descendant that does not match `decorationSelector` defines a range, with the element's tag name and attributes defining the range object's `data` fields:
 
 ```html
-<div class="target">Hello <b>World</p></div>
+<div class="target">Hello <b foo="bar">World</b></div>
 ```
 
-This markup will result in a frame containing the text `Hello World`, with the `<b>` element contributing nothing but its contents.
+This defines a frame with text content `Hello World` and the following range:
 
-The only exception to this rule are elements that match the selector passed to the options for `framesFromDom()` (`<mark>` elements by default). These elements get turned into **decorations.**
+```json
+{
+  "from": 6,
+  "to": 11,
+  "data": {
+    "tagName": "b",
+    "foo": "bar"
+  }
+}
+```
+
+[Read up on salting to learn what ranges can do for you!](http://code.movie/docs/guides/salting.html)
 
 ### Decorations
 
-[Decorations in Code.Movie](http://code.movie/docs/guides/decorations.html) can highlight lines, underline errors or place icons the gutter. Elements
-that match the selector passed to the options for `framesFromDom()` (`<mark>` elements by default) processed as decorations according to their class attributes:
+[Decorations in Code.Movie](http://code.movie/docs/guides/decorations.html) can highlight lines, underline errors or place icons the gutter. Elements that match the selector passed to the options for `framesFromDom()` (`<mark>` elements by default) processed as decorations according to their class attributes:
 
 | Element's class name contains | Resulting decoration                                             |
 | ----------------------------- | ---------------------------------------------------------------- |
@@ -160,7 +175,9 @@ that match the selector passed to the options for `framesFromDom()` (`<mark>` el
 | `line`                        | **Line decoration** for all lines that the element is part of    |
 | None of the above             | **Text decoration** for the characters within the element's tags |
 
-The `class` attribute can contain other strings, but whether or not they contain `gutter` or `line` determines whether the decoration ends up as a text, line or gutter decoration. The element's tag name and attributes are used to populate the decoration object's `data` fields:
+The `class` attribute can contain other strings, but whether or not they contain `gutter` or `line` determines whether the decoration ends up as a text, line or gutter decoration. Text content inside the decoration element is extracted into the frame's content.
+
+Like with ranges, the element's tag name and attributes are used to populate the decoration object's `data` fields:
 
 ```javascript
 // Given <p>[]</p><p>[<mark class="foo">42</mark>]</p><p>[<mark class="foo">23</mark>, 42]</p>
