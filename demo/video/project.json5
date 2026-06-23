@@ -10,6 +10,7 @@
     frameTime: 1200,
     format: "png",
     transparent: false,
+    fps: 30,
   },
   properties: {
     "--cm-align-middle": "1",
