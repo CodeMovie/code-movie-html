@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -50,9 +50,12 @@ console.log(add(1, 2)); // > 3</code></pre>
     import { framesFromDom } from "@codemovie/code-movie-html";
     const frameElements = document.querySelectorAll(
       ".animation pre.frame > code",
-      "code"
+      "code",
     );
     const frames = framesFromDom(frameElements);
+    console.group("Frames for animation");
+    console.log(frames);
+    console.groupEnd();
 
     // Use regular @codemovie/code-movie functionality to turn the frames into
     // animation HTML and CSS
@@ -86,6 +89,9 @@ console.log(add(1, 2)); // > 3</code></pre>
 
     // Add the last frame as a highlighted element
     const frame = framesFromDom(frameElements)[frameElements.length - 1];
+    console.group("Frame for static highlight");
+    console.log(frame);
+    console.groupEnd();
     const highlight = highlightHTML(frame, {
       tabSize: 2,
       language: ecmascript(),

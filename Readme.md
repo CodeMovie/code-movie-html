@@ -50,7 +50,7 @@ console.log(add(1, 2)); // > 3</code></pre>
 
 Result:
 
-![An animated code sample in a loop](https://github.com/CodeMovie/code-movie-html/raw/feature/jsdom/demo/demo.gif)
+![An animated code sample in a loop](https://github.com/CodeMovie/code-movie-html/raw/main/demo/video/video.gif)
 
 For an interactive example, install this package, run `npm run demo` and open `http://localhost:3000/demo/index.html` in a non-ancient web browser.
 

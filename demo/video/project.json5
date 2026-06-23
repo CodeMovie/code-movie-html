@@ -1,0 +1,38 @@
+{
+  inputOptions: {
+    languageModule: "ecmascript",
+    languageOptions: {},
+    baseTheme: "monokaiLight",
+  },
+  outputOptions: {
+    width: 800,
+    height: 450,
+    frameTime: 1200,
+    format: "png",
+    transparent: false,
+  },
+  properties: {
+    "--cm-align-middle": "1",
+    "--main-inset": "1ch",
+  },
+  frames: [
+    {
+      code: "// How to add two numbers in JS",
+    },
+    {
+      code: "// How to add two numbers in JS\nfunction add() {}",
+    },
+    {
+      code: "// How to add two numbers in JS\nfunction add(a, b) {}",
+    },
+    {
+      code: "// How to add two numbers in JS\nfunction add(a, b) {\n  return a + b;\n}",
+    },
+    {
+      code: "// How to add two numbers in JS\nfunction add(a, b) {\n  return a + b;\n}\n\nconsole.log(add(1, 2)); // > 3",
+    },
+    {
+      code: "// How to add two numbers in JS",
+    },
+  ],
+}
