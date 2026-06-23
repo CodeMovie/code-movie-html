@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.2
+
+- **Chore:** Bump dependencies, update readme and demos
+
 ## 2.0.1
 
 - **Chore:** Bump dependencies, update readme and demos
